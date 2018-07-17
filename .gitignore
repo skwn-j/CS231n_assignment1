@@ -1,0 +1,6 @@
+*.swp
+*.pyc
+.env/*
+
+#dataset foler
+/cs231n/datasets/cifar-10-batches-py/
