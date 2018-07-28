@@ -29,7 +29,11 @@ def softmax_loss_naive(W, X, y, reg):
   # here, it is easy to run into numeric instability. Don't forget the        #
   # regularization!                                                           #
   #############################################################################
-  pass
+  num_dim = np.shape(W)[0]
+  num_class = np.shape(W)[1]
+  num_ex = np.shape(X)[0]
+
+  
   #############################################################################
   #                          END OF YOUR CODE                                 #
   #############################################################################
