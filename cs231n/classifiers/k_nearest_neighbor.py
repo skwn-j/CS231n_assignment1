@@ -1,4 +1,6 @@
 import numpy as np
+from scipy import stats
+from scipy.spatial import distance 
 
 class KNearestNeighbor(object):
   """ a kNN classifier with L2 distance """
@@ -71,7 +73,8 @@ class KNearestNeighbor(object):
         # training point, and store the result in dists[i, j]. You should   #
         # not use a loop over dimension.                                    #
         #####################################################################
-        pass
+        dists[i, j] = distance.euclidean(X[i], self.X_train[j])
+        
         #####################################################################
         #                       END OF YOUR CODE                            #
         #####################################################################
@@ -145,7 +148,7 @@ class KNearestNeighbor(object):
     for i in range(num_test):
       # A list of length k storing the labels of the k nearest neighbors to
       # the ith test point.
-      closest_y = []
+      closest_y = np.zeros(k)
       #########################################################################
       # TODO:                                                                 #
       # Use the distance matrix to find the k nearest neighbors of the ith    #
@@ -153,7 +156,10 @@ class KNearestNeighbor(object):
       # neighbors. Store these labels in closest_y.                           #
       # Hint: Look up the function numpy.argsort.                             #
       #########################################################################
-      pass
+      closest_x = np.argsort(dists[i])
+      for j in range(k):
+        closest_y[j] = self.y_train[np.where(closest_x == j)] 
+      
       #########################################################################
       # TODO:                                                                 #
       # Now that you have found the labels of the k nearest neighbors, you    #
@@ -161,7 +167,9 @@ class KNearestNeighbor(object):
       # Store this label in y_pred[i]. Break ties by choosing the smaller     #
       # label.                                                                #
       #########################################################################
-      pass
+      freq = stats.itemfreq(closest_y)
+      freq_max = np.argmax(freq[:,1])
+      y_pred[i] = freq[freq_max, 0]
       #########################################################################
       #                           END OF YOUR CODE                            # 
       #########################################################################
