@@ -34,14 +34,19 @@ def svm_loss_naive(W, X, y, reg):
       margin = scores[j] - correct_class_score + 1 # note delta = 1
       if margin > 0:
         loss += margin
+        #gradient is not 0 if margin > 0
+        dW[ :, j] += X[i].T
+        dW[ :, y[i]] -= X[i].T
+
 
   # Right now the loss is a sum over all training examples, but we want it
   # to be an average instead so we divide by num_train.
   loss /= num_train
-
+  dW /= num_train
   # Add regularization to the loss.
   loss += reg * np.sum(W * W)
-
+  dW += reg*W
+  
   #############################################################################
   # TODO:                                                                     #
   # Compute the gradient of the loss function and store it dW.                #
