@@ -55,7 +55,7 @@ def svm_loss_naive(W, X, y, reg):
   # loss is being computed. As a result you may need to modify some of the    #
   # code above to compute the gradient.                                       #
   #############################################################################
-
+ 
 
   return loss, dW
 
@@ -68,13 +68,19 @@ def svm_loss_vectorized(W, X, y, reg):
   """
   loss = 0.0
   dW = np.zeros(W.shape) # initialize the gradient as zero
-
+  num_train = X.shape[0]
+  delta = 1.0
   #############################################################################
   # TODO:                                                                     #
   # Implement a vectorized version of the structured SVM loss, storing the    #
   # result in loss.                                                           #
   #############################################################################
-  pass
+  scores = X.dot(W)
+  y_i = scores[range(num_train), y]
+  margins = np.maximum(0, scores - y_i.reshape(num_train, 1) + delta)
+  margins[range(num_train), y] = 0
+  loss = np.mean(np.sum(margins, axis=1))
+  loss += reg * np.sum(W * W)
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
@@ -89,9 +95,16 @@ def svm_loss_vectorized(W, X, y, reg):
   # to reuse some of the intermediate values that you used to compute the     #
   # loss.                                                                     #
   #############################################################################
-  pass
+  
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
 
+  margins[margins>0]=1
+  counts = np.count_nonzero(margins, axis=1)
+  margins[range(num_train), y] = -counts
+  
+  dW = X.T.dot(margins)
+  dW /= num_train
+  dW += 2*reg*np.sum(W * W)
   return loss, dW
