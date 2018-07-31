@@ -106,5 +106,5 @@ def svm_loss_vectorized(W, X, y, reg):
   
   dW = X.T.dot(margins)
   dW /= num_train
-  dW += 2*reg*np.sum(W * W)
+  dW += reg*W
   return loss, dW
